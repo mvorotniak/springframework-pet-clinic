@@ -1,14 +1,7 @@
 package com.mvorodeveloper.springframeworkpetclinic.services;
 
-import java.util.Set;
-
 import com.mvorodeveloper.springframeworkpetclinic.model.Vet;
 
-public interface VetService {
+public interface VetService extends BaseCrudService<Vet, Long>{
 
-    Vet findById(Long id);
-
-    Vet save(Vet vet);
-
-    Set<Vet> findAll();
 }
