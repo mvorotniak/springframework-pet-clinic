@@ -3,9 +3,9 @@ package com.mvorodeveloper.springframeworkpetclinic.services.map;
 import java.util.Set;
 
 import com.mvorodeveloper.springframeworkpetclinic.model.Vet;
-import com.mvorodeveloper.springframeworkpetclinic.services.BaseCrudService;
+import com.mvorodeveloper.springframeworkpetclinic.services.VetService;
 
-public class VetServiceMap extends AbstractMapService<Vet, Long> implements BaseCrudService<Vet, Long> {
+public class VetServiceMap extends AbstractMapService<Vet, Long> implements VetService {
 
     @Override
     public Set<Vet> findAll() {
