@@ -26,12 +26,10 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) {
         Owner ownerLisa = new Owner();
-        ownerLisa.setId(1L);
         ownerLisa.setFirstName("Lisa");
         ownerLisa.setLastName("Simpson");
 
         Owner ownerBart = new Owner();
-        ownerBart.setId(2L);
         ownerBart.setFirstName("Bart");
         ownerBart.setLastName("Simpson");
 
@@ -40,12 +38,10 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Saved owners..." + ownerServiceMap.findAll().size());
 
         Vet vetMarta = new Vet();
-        vetMarta.setId(1L);
         vetMarta.setFirstName("Marta");
         vetMarta.setLastName("Thomas");
 
         Vet vetAlex = new Vet();
-        vetAlex.setId(2L);
         vetAlex.setFirstName("Alex");
         vetAlex.setLastName("Gordon");
 
