@@ -42,6 +42,22 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
         }
     }
 
+    @Override
+    public void delete(Owner object) {
+        super.delete(object);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        super.deleteById(id);
+    }
+
+    @Override
+    public Owner findByLastName(String lastName) {
+        // TODO: add realization
+        return null;
+    }
+
     private void checkOwnerPets(Owner owner) {
         owner.getPets().forEach(pet -> {
             checkPetType(pet);
@@ -67,21 +83,5 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
         if (petType.getId() == null) {
             petTypeService.save(petType);
         }
-    }
-
-    @Override
-    public void delete(Owner object) {
-        super.delete(object);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        super.deleteById(id);
-    }
-
-    @Override
-    public Owner findByLastName(String lastName) {
-        // TODO: add realization
-        return null;
     }
 }
