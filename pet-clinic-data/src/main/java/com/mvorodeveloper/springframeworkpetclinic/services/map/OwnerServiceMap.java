@@ -5,10 +5,22 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
+import com.mvorodeveloper.springframeworkpetclinic.model.Pet;
+import com.mvorodeveloper.springframeworkpetclinic.model.PetType;
 import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
+import com.mvorodeveloper.springframeworkpetclinic.services.PetService;
+import com.mvorodeveloper.springframeworkpetclinic.services.PetTypeService;
 
 @Service
 public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements OwnerService {
+
+    private final PetService petService;
+    private final PetTypeService petTypeService;
+
+    public OwnerServiceMap(PetService petService, PetTypeService petTypeService) {
+        this.petService = petService;
+        this.petTypeService = petTypeService;
+    }
 
     @Override
     public Set<Owner> findAll() {
@@ -22,7 +34,39 @@ public class OwnerServiceMap extends AbstractMapService<Owner, Long> implements 
 
     @Override
     public Owner save(Owner object) {
-        return super.save(object);
+        if (object != null) {
+            checkOwnerPets(object);
+            return super.save(object);
+        } else {
+            return null;
+        }
+    }
+
+    private void checkOwnerPets(Owner owner) {
+        owner.getPets().forEach(pet -> {
+            checkPetType(pet);
+            checkPetId(pet);
+        });
+    }
+
+    private void checkPetType(Pet pet) {
+        if (pet.getPetType() != null) {
+            checkPetTypeId(pet.getPetType());
+        } else {
+            throw new RuntimeException("Owner's Pet should have Pet Type.");
+        }
+    }
+
+    private void checkPetId(Pet pet) {
+        if (pet.getId() == null) {
+            petService.save(pet);
+        }
+    }
+
+    private void checkPetTypeId(PetType petType) {
+        if (petType.getId() == null) {
+            petTypeService.save(petType);
+        }
     }
 
     @Override

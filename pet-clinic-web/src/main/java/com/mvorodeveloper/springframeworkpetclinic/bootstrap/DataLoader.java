@@ -1,9 +1,12 @@
 package com.mvorodeveloper.springframeworkpetclinic.bootstrap;
 
+import java.time.LocalDate;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
+import com.mvorodeveloper.springframeworkpetclinic.model.Pet;
 import com.mvorodeveloper.springframeworkpetclinic.model.PetType;
 import com.mvorodeveloper.springframeworkpetclinic.model.Vet;
 import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
@@ -21,7 +24,11 @@ public class DataLoader implements CommandLineRunner {
     private final PetTypeService petTypeService;
 
     // No need of @Autowired
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService) {
+    public DataLoader(
+        OwnerService ownerService,
+        VetService vetService,
+        PetTypeService petTypeService
+    ) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
@@ -42,10 +49,32 @@ public class DataLoader implements CommandLineRunner {
         Owner ownerLisa = new Owner();
         ownerLisa.setFirstName("Lisa");
         ownerLisa.setLastName("Simpson");
+        ownerLisa.setAddress("Main Street 1");
+        ownerLisa.setCity("New York");
+        ownerLisa.setTelephone("+123422524");
+
+        Pet lisaPet = new Pet();
+        lisaPet.setName("Sparkles");
+        lisaPet.setPetType(dog);
+        lisaPet.setBirthDate(LocalDate.now());
+        lisaPet.setOwner(ownerLisa);
+
+        ownerLisa.getPets().add(lisaPet);
 
         Owner ownerBart = new Owner();
         ownerBart.setFirstName("Bart");
         ownerBart.setLastName("Simpson");
+        ownerBart.setAddress("Light Street 23");
+        ownerBart.setCity("Springfield");
+        ownerBart.setTelephone("+123444524");
+
+        Pet bartPet = new Pet();
+        bartPet.setName("Mr Friss");
+        bartPet.setPetType(cat);
+        bartPet.setBirthDate(LocalDate.now());
+        bartPet.setOwner(ownerBart);
+
+        ownerBart.getPets().add(bartPet);
 
         ownerService.save(ownerLisa);
         ownerService.save(ownerBart);
