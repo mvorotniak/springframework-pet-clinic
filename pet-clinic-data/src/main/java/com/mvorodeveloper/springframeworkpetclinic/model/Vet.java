@@ -1,5 +1,5 @@
 package com.mvorodeveloper.springframeworkpetclinic.model;
 
-public class Vet extends Person{
+public class Vet extends Person {
 
 }
