@@ -12,7 +12,7 @@ import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
 
 @Service
 // this is added so there are no conflicts with other implementations of OwnerService. This profile is disabled.
-@Profile("OwnerJpaService")
+@Profile("springdatajpa")
 public class OwnerJpaService implements OwnerService {
 
     private final OwnerRepository ownerRepository;
@@ -24,7 +24,7 @@ public class OwnerJpaService implements OwnerService {
     @Override
     public Set<Owner> findAll() {
         Set<Owner> owners = new HashSet<>();
-        ownerRepository.findAll().iterator().forEachRemaining(owners::add);
+        ownerRepository.findAll().forEach(owners::add);
 
         return owners;
     }

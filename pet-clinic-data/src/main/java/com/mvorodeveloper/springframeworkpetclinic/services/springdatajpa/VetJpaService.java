@@ -11,7 +11,7 @@ import com.mvorodeveloper.springframeworkpetclinic.repositories.VetRepository;
 import com.mvorodeveloper.springframeworkpetclinic.services.VetService;
 
 @Service
-@Profile("VetJpaService")
+@Profile("springdatajpa")
 public class VetJpaService implements VetService {
 
     private final VetRepository vetRepository;
@@ -23,7 +23,7 @@ public class VetJpaService implements VetService {
     @Override
     public Set<Vet> findAll() {
         Set<Vet> vets = new HashSet<>();
-        vetRepository.findAll().iterator().forEachRemaining(vets::add);
+        vetRepository.findAll().forEach(vets::add);
 
         return vets;
     }
