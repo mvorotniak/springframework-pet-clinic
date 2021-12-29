@@ -3,15 +3,21 @@ package com.mvorodeveloper.springframeworkpetclinic.services.springdatajpa;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
 import com.mvorodeveloper.springframeworkpetclinic.repositories.OwnerRepository;
 import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
 
-public class OwnerServiceImpl implements OwnerService {
+@Service
+// this is added so there are no conflicts with other implementations of OwnerService. This profile is disabled.
+@Profile("OwnerJpaService")
+public class OwnerJpaService implements OwnerService {
 
     private final OwnerRepository ownerRepository;
 
-    public OwnerServiceImpl(OwnerRepository ownerRepository) {
+    public OwnerJpaService(OwnerRepository ownerRepository) {
         this.ownerRepository = ownerRepository;
     }
 
