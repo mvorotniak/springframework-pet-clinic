@@ -11,7 +11,8 @@ import javax.persistence.MappedSuperclass;
  * The Serializable interface is a marker interface;
  * it declares no methods at all. It tells the serialization mechanism that the class can be serialized.
  *
- * Annotated with MappedSuperclass, which means we want to inherit from this class
+ * Annotated with MappedSuperclass, which means we want to inherit from this class.
+ * This object is not going to be created in the database.
  */
 @MappedSuperclass
 public class BaseEntity implements Serializable {
