@@ -2,6 +2,7 @@ package com.mvorodeveloper.springframeworkpetclinic.services.map;
 
 import java.util.Set;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
@@ -12,6 +13,8 @@ import com.mvorodeveloper.springframeworkpetclinic.services.PetService;
 import com.mvorodeveloper.springframeworkpetclinic.services.PetTypeService;
 
 @Service
+// If there is no active profile Spring will take the "default" one
+@Profile({"default", "map"})
 public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
 
     private final PetService petService;
