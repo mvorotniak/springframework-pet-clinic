@@ -9,6 +9,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+/**
+ * JPA Entity that represents the Vets database table
+ */
 @Entity
 @Table(name = "vets")
 public class Vet extends Person {

@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ * JPA Entity that represents the Specialties database table
+ */
 @Entity
 @Table(name = "specialties")
 public class Specialty extends BaseEntity {
