@@ -30,7 +30,8 @@ public class PetJpaService implements PetService {
 
     @Override
     public Pet findById(Long id) {
-        return petRepository.findById(id).orElseThrow(() -> new RuntimeException("Unable to find pet with id " + id));
+        return petRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Unable to find pet with id " + id));
     }
 
     @Override
