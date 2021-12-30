@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * The Serializable interface is a marker interface;
  * it declares no methods at all. It tells the serialization mechanism that the class can be serialized.
@@ -14,6 +17,8 @@ import javax.persistence.MappedSuperclass;
  * Annotated with MappedSuperclass, which means we want to inherit from this class.
  * This object is not going to be created in the database.
  */
+@Getter
+@Setter
 @MappedSuperclass
 public class BaseEntity implements Serializable {
 
@@ -26,11 +31,4 @@ public class BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

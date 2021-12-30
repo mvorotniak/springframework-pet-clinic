@@ -17,9 +17,12 @@ import com.mvorodeveloper.springframeworkpetclinic.services.SpecialtyService;
 import com.mvorodeveloper.springframeworkpetclinic.services.VetService;
 import com.mvorodeveloper.springframeworkpetclinic.services.VisitService;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Fills in-memory data stored into a HashMap
  */
+@Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -50,83 +53,66 @@ public class DataLoader implements CommandLineRunner {
     }
 
     private void loadData() {
-        PetType dog = new PetType();
-        dog.setName("Dog");
-
-        PetType cat = new PetType();
-        cat.setName("Cat");
+        PetType dog = PetType.builder().name("Dog").build();
+        PetType cat = PetType.builder().name("Cat").build();
 
         petTypeService.save(dog);
         petTypeService.save(cat);
-        System.out.println("Saved pet types..." + petTypeService.findAll().size());
+        log.info("Saved pet types..." + petTypeService.findAll().size());
 
-        Specialty radiology = new Specialty();
-        radiology.setDescription("Radiology");
-
-        Specialty surgery = new Specialty();
-        surgery.setDescription("Surgery");
-
-        Specialty dentistry = new Specialty();
-        dentistry.setDescription("Dentistry");
+        Specialty radiology = Specialty.builder().description("Radiology").build();
+        Specialty surgery = Specialty.builder().description("Surgery").build();
+        Specialty dentistry = Specialty.builder().description("Dentistry").build();
 
         specialtyService.save(radiology);
         specialtyService.save(surgery);
         specialtyService.save(dentistry);
-        System.out.println("Saved specialties..." + specialtyService.findAll().size());
+        log.info("Saved specialties..." + specialtyService.findAll().size());
 
-        Owner ownerLisa = new Owner();
-        ownerLisa.setFirstName("Lisa");
-        ownerLisa.setLastName("Simpson");
-        ownerLisa.setAddress("Main Street 1");
-        ownerLisa.setCity("New York");
-        ownerLisa.setTelephone("+123422524");
+        Owner ownerLisa = Owner.builder()
+            .firstName("Lisa")
+            .lastName("Simpson")
+            .address("Main Street 1")
+            .city("New York")
+            .telephone("+123422524")
+            .build();
 
-        Pet lisaPet = new Pet();
-        lisaPet.setName("Sparkles");
-        lisaPet.setPetType(dog);
-        lisaPet.setBirthDate(LocalDate.now());
-        lisaPet.setOwner(ownerLisa);
+        Pet lisaPet = Pet.builder().name("Sparkles").petType(dog).birthDate(LocalDate.now()).owner(ownerLisa).build();
 
         ownerLisa.getPets().add(lisaPet);
 
-        Owner ownerBart = new Owner();
-        ownerBart.setFirstName("Bart");
-        ownerBart.setLastName("Simpson");
-        ownerBart.setAddress("Light Street 23");
-        ownerBart.setCity("Springfield");
-        ownerBart.setTelephone("+123444524");
+        Owner ownerBart = Owner.builder()
+            .firstName("Bart")
+            .lastName("Simpson")
+            .address("Light Street 23")
+            .city("Springfield")
+            .telephone("+123444524")
+            .build();
 
-        Pet bartPet = new Pet();
-        bartPet.setName("Mr Friss");
-        bartPet.setPetType(cat);
-        bartPet.setBirthDate(LocalDate.now());
-        bartPet.setOwner(ownerBart);
+        Pet bartPet = Pet.builder().name("Mr Friss").petType(cat).birthDate(LocalDate.now()).owner(ownerBart).build();
 
         ownerBart.getPets().add(bartPet);
 
         ownerService.save(ownerLisa);
         ownerService.save(ownerBart);
-        System.out.println("Saved owners..." + ownerService.findAll().size());
+        log.info("Saved owners..." + ownerService.findAll().size());
 
-        Visit lisaPetVisit = new Visit();
-        lisaPetVisit.setDescription("Crazy dog");
-        lisaPetVisit.setDate(LocalDate.now());
-        lisaPetVisit.setPet(lisaPet);
+        Visit lisaPetVisit = Visit.builder()
+            .description("Crazy dog")
+            .date(LocalDate.now())
+            .pet(lisaPet)
+            .build();
 
         visitService.save(lisaPetVisit);
 
-        Vet vetMarta = new Vet();
-        vetMarta.setFirstName("Marta");
-        vetMarta.setLastName("Thomas");
+        Vet vetMarta = Vet.builder().firstName("Marta").lastName("Thomas").build();
         vetMarta.getSpecialties().add(radiology);
 
-        Vet vetAlex = new Vet();
-        vetAlex.setFirstName("Alex");
-        vetAlex.setLastName("Gordon");
+        Vet vetAlex = Vet.builder().firstName("Alex").lastName("Gordon").build();
         vetAlex.getSpecialties().add(surgery);
 
         vetService.save(vetMarta);
         vetService.save(vetAlex);
-        System.out.println("Saved vets..." + vetService.findAll().size());
+        log.info("Saved vets..." + vetService.findAll().size());
     }
 }
