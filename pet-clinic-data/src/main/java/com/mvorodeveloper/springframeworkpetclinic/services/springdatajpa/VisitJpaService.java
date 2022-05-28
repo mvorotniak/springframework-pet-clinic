@@ -1,5 +1,6 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.springdatajpa;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -19,7 +20,10 @@ public class VisitJpaService implements VisitService {
 
     @Override
     public Set<Visit> findAll() {
-        return (Set<Visit>) visitRepository.findAll();
+        Set<Visit> visits = new HashSet<>();
+        visitRepository.findAll().forEach(visits::add);
+
+        return visits;
     }
 
     @Override

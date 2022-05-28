@@ -15,7 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import lombok.ToString;
 
 /**
  * JPA Entity that represents the Vets database table
@@ -24,14 +24,19 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@ToString
 @Entity
 @Table(name = "vets")
 public class Vet extends Person {
 
+    @Builder
+    public Vet(String firstName, String lastName) {
+        super(firstName, lastName);
+    }
+
     /**
      * A table called `vet_specialties` will represent the Vet-Specialty relationship.
-     * The fetch type is EAGER so we create the objects even if they are not required.
+     * The fetch type is EAGER, so we create the objects even if they are not required.
      */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "vet_specialties",

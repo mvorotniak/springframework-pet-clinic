@@ -1,5 +1,6 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.springdatajpa;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -19,7 +20,10 @@ public class SpecialtyJpaService implements SpecialtyService {
 
     @Override
     public Set<Specialty> findAll() {
-        return (Set<Specialty>) specialtyRepository.findAll();
+        Set<Specialty> specialties = new HashSet<>();
+        specialtyRepository.findAll().forEach(specialties::add);
+
+        return specialties;
     }
 
     @Override

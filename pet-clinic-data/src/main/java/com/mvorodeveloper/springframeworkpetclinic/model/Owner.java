@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 /**
  * JPA Entity that represents the Owners database table
@@ -21,10 +20,17 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @NoArgsConstructor
-@SuperBuilder
 @Entity
 @Table(name = "owners")
 public class Owner extends Person {
+
+    @Builder
+    public Owner(String firstName, String lastName, String address, String city, String telephone) {
+        super(firstName, lastName);
+        this.address = address;
+        this.city = city;
+        this.telephone = telephone;
+    }
 
     @Column(name = "address")
     private String address;
@@ -41,5 +47,16 @@ public class Owner extends Person {
      */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private Set<Pet> pets = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+            "id = " + getId() + ", " +
+            "address = " + getAddress() + ", " +
+            "city = " + getCity() + ", " +
+            "telephone = " + getTelephone() + ", " +
+            "firstName = " + getFirstName() + ", " +
+            "lastName = " + getLastName() + ")";
+    }
 
 }

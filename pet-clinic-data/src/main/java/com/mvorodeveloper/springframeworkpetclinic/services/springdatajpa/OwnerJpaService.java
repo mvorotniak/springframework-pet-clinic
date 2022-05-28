@@ -1,5 +1,6 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.springdatajpa;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -20,7 +21,10 @@ public class OwnerJpaService implements OwnerService {
 
     @Override
     public Set<Owner> findAll() {
-        return (Set<Owner>) ownerRepository.findAll();
+        Set<Owner> owners = new HashSet<>();
+        ownerRepository.findAll().forEach(owners::add);
+
+        return owners;
     }
 
     @Override

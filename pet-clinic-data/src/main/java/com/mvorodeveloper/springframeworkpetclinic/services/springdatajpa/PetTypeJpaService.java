@@ -1,5 +1,6 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.springdatajpa;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -19,7 +20,10 @@ public class PetTypeJpaService implements PetTypeService {
 
     @Override
     public Set<PetType> findAll() {
-        return (Set<PetType>) petTypeRepository.findAll();
+        Set<PetType> petTypes = new HashSet<>();
+        petTypeRepository.findAll().forEach(petTypes::add);
+
+        return petTypes;
     }
 
     @Override
