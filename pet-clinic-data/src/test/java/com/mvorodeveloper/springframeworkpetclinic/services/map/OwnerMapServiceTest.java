@@ -1,5 +1,6 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.map;
 
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -53,7 +55,7 @@ class OwnerMapServiceTest {
 
     @Test
     void delete() {
-        ownerMapService.delete(ownerMapService.findByLastName(lastName));
+        ownerMapService.delete(ownerMapService.findByLastNameLike(lastName).get(0));
         Set<Owner> owners = ownerMapService.findAll();
 
         assertEquals(0, owners.size());
@@ -69,7 +71,7 @@ class OwnerMapServiceTest {
 
     @Test
     void findByLastName() {
-        Owner owner = ownerMapService.findByLastName(lastName);
+        Owner owner = ownerMapService.findByLastNameLike(lastName).get(0);
 
         assertNotNull(owner);
         assertEquals(1L, owner.getId());
@@ -78,9 +80,9 @@ class OwnerMapServiceTest {
 
     @Test
     void findByLastName_notFound() {
-        String randomLastName = "Da Vinci";
-        Owner owner = ownerMapService.findByLastName(randomLastName);
+        final String randomLastName = "Da Vinci";
+        final List<Owner> owners = ownerMapService.findByLastNameLike(randomLastName);
 
-        assertNull(owner);
+        assertThat(owners).isEmpty();
     }
 }

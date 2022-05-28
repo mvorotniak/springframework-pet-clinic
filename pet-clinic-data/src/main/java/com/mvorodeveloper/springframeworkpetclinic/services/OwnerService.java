@@ -1,9 +1,11 @@
 package com.mvorodeveloper.springframeworkpetclinic.services;
 
+import java.util.List;
+
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
 
 public interface OwnerService extends BaseCrudService<Owner, Long> {
 
-    Owner findByLastName(String lastName);
+    List<Owner> findByLastNameLike(String lastName);
 
 }

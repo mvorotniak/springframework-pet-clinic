@@ -1,6 +1,8 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.springdatajpa;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
 import com.mvorodeveloper.springframeworkpetclinic.repositories.OwnerRepository;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
@@ -102,19 +105,21 @@ class OwnerJpaServiceTest {
 
     @Test
     void findByLastName() {
-        when(ownerRepository.findByLastName(lastName)).thenReturn(Optional.of(owner));
+        when(ownerRepository.findByLastNameLike(lastName)).thenReturn(Collections.singletonList(owner));
 
-        Owner result = ownerJpaService.findByLastName(lastName);
+        Owner result = ownerJpaService.findByLastNameLike(lastName).get(0);
 
         assertEquals(1L, result.getId());
         assertEquals(lastName, result.getLastName());
-        verify(ownerRepository).findByLastName(lastName);
+        verify(ownerRepository).findByLastNameLike(lastName);
     }
 
     @Test
     void findByLastName_notFound() {
-        when(ownerRepository.findByLastName(lastName)).thenReturn(null);
+        when(ownerRepository.findByLastNameLike(lastName)).thenReturn(Collections.emptyList());
 
-        assertThrows(RuntimeException.class, () -> ownerJpaService.findByLastName(lastName));
+        final List<Owner> owners = this.ownerJpaService.findByLastNameLike(lastName);
+
+        assertThat(owners).isEmpty();
     }
 }

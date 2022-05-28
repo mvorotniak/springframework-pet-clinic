@@ -1,7 +1,9 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.map;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -30,12 +32,12 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     @Override
-    public Owner findById(Long id) {
+    public Owner findById(final Long id) {
         return super.findById(id);
     }
 
     @Override
-    public Owner save(Owner object) {
+    public Owner save(final Owner object) {
         return Optional.ofNullable(object)
             .map(obj -> {
                 checkOwnerPets(object);
@@ -45,31 +47,30 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     @Override
-    public void delete(Owner object) {
+    public void delete(final Owner object) {
         super.delete(object);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(final Long id) {
         super.deleteById(id);
     }
 
     @Override
-    public Owner findByLastName(String lastName) {
+    public List<Owner> findByLastNameLike(final String lastName) {
         return findAll().stream()
-            .filter(owner -> owner.getLastName().equalsIgnoreCase(lastName))
-            .findFirst()
-            .orElse(null);
+            .filter(owner -> owner.getLastName().contains(lastName))
+            .collect(Collectors.toList());
     }
 
-    private void checkOwnerPets(Owner owner) {
+    private void checkOwnerPets(final Owner owner) {
         owner.getPets().forEach(pet -> {
             checkPetType(pet);
             checkPetId(pet);
         });
     }
 
-    private void checkPetType(Pet pet) {
+    private void checkPetType(final Pet pet) {
         Optional.ofNullable(pet.getPetType())
             .ifPresentOrElse(
                 this::checkPetTypeId,
@@ -77,13 +78,13 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
             );
     }
 
-    private void checkPetId(Pet pet) {
+    private void checkPetId(final Pet pet) {
         if (pet.getId() == null) {
             petService.save(pet);
         }
     }
 
-    private void checkPetTypeId(PetType petType) {
+    private void checkPetTypeId(final PetType petType) {
         if (petType.getId() == null) {
             petTypeService.save(petType);
         }
