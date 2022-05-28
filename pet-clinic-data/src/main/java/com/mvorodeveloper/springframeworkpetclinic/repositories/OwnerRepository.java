@@ -9,4 +9,5 @@ import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
 public interface OwnerRepository extends CrudRepository<Owner, Long> {
 
     Optional<Owner> findByLastName(String lastName);
+
 }

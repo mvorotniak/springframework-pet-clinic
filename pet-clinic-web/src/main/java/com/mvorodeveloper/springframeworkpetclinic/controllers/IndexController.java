@@ -3,6 +3,9 @@ package com.mvorodeveloper.springframeworkpetclinic.controllers;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Home page controller
+ */
 @Controller
 public class IndexController {
 
@@ -15,4 +18,5 @@ public class IndexController {
     public String oups() {
         return "notimplemented";
     }
+
 }

@@ -1,5 +1,6 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.map;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -11,19 +12,17 @@ import com.mvorodeveloper.springframeworkpetclinic.model.PetType;
 import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
 import com.mvorodeveloper.springframeworkpetclinic.services.PetService;
 import com.mvorodeveloper.springframeworkpetclinic.services.PetTypeService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 // If there is no active profile Spring will take the "default" one
 @Profile({"default", "map"})
 public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
 
     private final PetService petService;
-    private final PetTypeService petTypeService;
 
-    public OwnerMapService(PetService petService, PetTypeService petTypeService) {
-        this.petService = petService;
-        this.petTypeService = petTypeService;
-    }
+    private final PetTypeService petTypeService;
 
     @Override
     public Set<Owner> findAll() {
@@ -37,12 +36,12 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
 
     @Override
     public Owner save(Owner object) {
-        if (object != null) {
-            checkOwnerPets(object);
-            return super.save(object);
-        } else {
-            return null;
-        }
+        return Optional.ofNullable(object)
+            .map(obj -> {
+                checkOwnerPets(object);
+                return super.save(object);
+            })
+            .orElse(null);
     }
 
     @Override
@@ -71,11 +70,11 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     private void checkPetType(Pet pet) {
-        if (pet.getPetType() != null) {
-            checkPetTypeId(pet.getPetType());
-        } else {
-            throw new RuntimeException("Owner's Pet should have Pet Type.");
-        }
+        Optional.ofNullable(pet.getPetType())
+            .ifPresentOrElse(
+                this::checkPetTypeId,
+                () -> new RuntimeException("Owner's Pet should have Pet Type.")
+            );
     }
 
     private void checkPetId(Pet pet) {
@@ -89,4 +88,5 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
             petTypeService.save(petType);
         }
     }
+
 }

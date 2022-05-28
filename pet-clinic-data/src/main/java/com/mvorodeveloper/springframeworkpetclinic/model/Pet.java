@@ -33,12 +33,16 @@ public class Pet extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    // Column we'll use for joining a PetType-Pet entity association
+    /**
+     * Column we'll use for joining a PetType-Pet entity association
+     */
     @ManyToOne
     @JoinColumn(name = "pet_type_id")
     private PetType petType;
 
-    // Column we'll use for joining a Owner-Pet entity association
+    /**
+     * Column we'll use for joining an Owner-Pet entity association
+     */
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;

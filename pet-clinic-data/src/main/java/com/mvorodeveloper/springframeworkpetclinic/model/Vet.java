@@ -15,6 +15,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * JPA Entity that represents the Vets database table
@@ -23,14 +24,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "vets")
 public class Vet extends Person {
-
-    @Builder
-    public Vet(String firstName, String lastName) {
-        super(firstName, lastName);
-    }
 
     /**
      * A table called `vet_specialties` will represent the Vet-Specialty relationship.

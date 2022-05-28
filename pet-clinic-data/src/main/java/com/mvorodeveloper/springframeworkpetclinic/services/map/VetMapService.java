@@ -8,16 +8,14 @@ import org.springframework.stereotype.Service;
 import com.mvorodeveloper.springframeworkpetclinic.model.Vet;
 import com.mvorodeveloper.springframeworkpetclinic.services.SpecialtyService;
 import com.mvorodeveloper.springframeworkpetclinic.services.VetService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 @Profile({"default", "map"})
 public class VetMapService extends AbstractMapService<Vet, Long> implements VetService {
 
     private final SpecialtyService specialtyService;
-
-    public VetMapService(SpecialtyService specialtyService) {
-        this.specialtyService = specialtyService;
-    }
 
     @Override
     public Set<Vet> findAll() {
@@ -31,7 +29,7 @@ public class VetMapService extends AbstractMapService<Vet, Long> implements VetS
 
     @Override
     public Vet save(Vet object) {
-        if (object.getSpecialties().size() > 0) {
+        if (!object.getSpecialties().isEmpty()) {
             checkSpecialties(object);
         }
 
@@ -55,4 +53,5 @@ public class VetMapService extends AbstractMapService<Vet, Long> implements VetS
             }
         });
     }
+
 }

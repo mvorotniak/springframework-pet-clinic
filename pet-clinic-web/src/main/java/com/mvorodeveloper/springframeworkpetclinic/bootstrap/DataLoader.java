@@ -17,35 +17,26 @@ import com.mvorodeveloper.springframeworkpetclinic.services.SpecialtyService;
 import com.mvorodeveloper.springframeworkpetclinic.services.VetService;
 import com.mvorodeveloper.springframeworkpetclinic.services.VisitService;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Fills in-memory data stored into a HashMap
  */
+@AllArgsConstructor
 @Slf4j
 @Component
 public class DataLoader implements CommandLineRunner {
 
     private final OwnerService ownerService;
-    private final VetService vetService;
-    private final PetTypeService petTypeService;
-    private final SpecialtyService specialtyService;
-    private final VisitService visitService;
 
-    // No need of @Autowired
-    public DataLoader(
-        OwnerService ownerService,
-        VetService vetService,
-        PetTypeService petTypeService,
-        SpecialtyService specialtyService,
-        VisitService visitService
-    ) {
-        this.ownerService = ownerService;
-        this.vetService = vetService;
-        this.petTypeService = petTypeService;
-        this.specialtyService = specialtyService;
-        this.visitService = visitService;
-    }
+    private final VetService vetService;
+
+    private final PetTypeService petTypeService;
+
+    private final SpecialtyService specialtyService;
+
+    private final VisitService visitService;
 
     @Override
     public void run(String... args) {
@@ -115,4 +106,5 @@ public class DataLoader implements CommandLineRunner {
         vetService.save(vetAlex);
         log.info("Saved vets..." + vetService.findAll().size());
     }
+
 }

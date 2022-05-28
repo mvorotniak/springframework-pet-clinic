@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.mvorodeveloper.springframeworkpetclinic.model.Visit;
 import com.mvorodeveloper.springframeworkpetclinic.services.VisitService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Profile({"default", "map"})
 public class VisitMapService extends AbstractMapService<Visit, Long> implements VisitService {
@@ -26,7 +28,7 @@ public class VisitMapService extends AbstractMapService<Visit, Long> implements 
     public Visit save(Visit object) {
         if (object.getPet() == null || object.getPet().getId() == null
             || object.getPet().getOwner() == null || object.getPet().getOwner().getId() == null) {
-            throw new RuntimeException("Unable to save visit. Visit entity not correct.");
+            log.error("Unable to save visit. Visit entity not correct.");
         }
 
         return super.save(object);
@@ -41,4 +43,5 @@ public class VisitMapService extends AbstractMapService<Visit, Long> implements 
     public void deleteById(Long id) {
         super.deleteById(id);
     }
+
 }

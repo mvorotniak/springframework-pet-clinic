@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 /**
  * JPA Entity that represents the Owners database table
@@ -20,17 +21,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "owners")
 public class Owner extends Person {
-
-    @Builder
-    public Owner(String firstName, String lastName, String address, String city, String telephone) {
-        super(firstName, lastName);
-        this.address = address;
-        this.city = city;
-        this.telephone = telephone;
-    }
 
     @Column(name = "address")
     private String address;
@@ -43,7 +37,7 @@ public class Owner extends Person {
 
     /**
      * One owner can have many pets. If an Owner is removed from the DB then all his pets should also be removed.
-     * This is mapped to the `owner` filed under Pet, so the pets DB table will contain an `owner` column for linking
+     * This is mapped to the `owner` filled under Pet, so the pets DB table will contain an `owner` column for linking
      */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
     private Set<Pet> pets = new HashSet<>();

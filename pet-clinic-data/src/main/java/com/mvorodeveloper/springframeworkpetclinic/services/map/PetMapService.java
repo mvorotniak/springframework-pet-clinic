@@ -36,4 +36,5 @@ public class PetMapService extends AbstractMapService<Pet, Long> implements PetS
     public void deleteById(Long id) {
         super.deleteById(id);
     }
+
 }

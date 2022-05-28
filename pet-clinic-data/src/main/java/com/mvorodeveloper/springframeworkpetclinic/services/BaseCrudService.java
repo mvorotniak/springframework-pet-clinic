@@ -2,15 +2,16 @@ package com.mvorodeveloper.springframeworkpetclinic.services;
 
 import java.util.Set;
 
-public interface BaseCrudService<T, ID> {
+public interface BaseCrudService<T, I> {
 
     Set<T> findAll();
 
-    T findById(ID id);
+    T findById(I id);
 
     T save(T object);
 
     void delete(T object);
 
-    void deleteById(ID id);
+    void deleteById(I id);
+
 }

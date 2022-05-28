@@ -1,6 +1,5 @@
 package com.mvorodeveloper.springframeworkpetclinic.services.springdatajpa;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.context.annotation.Profile;
@@ -9,29 +8,24 @@ import org.springframework.stereotype.Service;
 import com.mvorodeveloper.springframeworkpetclinic.model.Vet;
 import com.mvorodeveloper.springframeworkpetclinic.repositories.VetRepository;
 import com.mvorodeveloper.springframeworkpetclinic.services.VetService;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 @Profile("springdatajpa")
 public class VetJpaService implements VetService {
 
     private final VetRepository vetRepository;
 
-    public VetJpaService(VetRepository vetRepository) {
-        this.vetRepository = vetRepository;
-    }
-
     @Override
     public Set<Vet> findAll() {
-        Set<Vet> vets = new HashSet<>();
-        vetRepository.findAll().forEach(vets::add);
-
-        return vets;
+        return (Set<Vet>) vetRepository.findAll();
     }
 
     @Override
     public Vet findById(Long id) {
         return vetRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Unable to find vet with id " + id));
+            .orElseThrow(() -> new RuntimeException("Unable to find vet with id [" + id + "]"));
     }
 
     @Override
@@ -48,4 +42,5 @@ public class VetJpaService implements VetService {
     public void deleteById(Long id) {
         vetRepository.deleteById(id);
     }
+
 }
