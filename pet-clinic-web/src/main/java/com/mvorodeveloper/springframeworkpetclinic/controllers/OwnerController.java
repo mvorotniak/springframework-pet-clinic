@@ -6,8 +6,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,19 +20,37 @@ import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.Valid;
+
 @Slf4j
 @AllArgsConstructor
 @RequestMapping("/owners")
 @Controller
 public class OwnerController {
 
+    private static final String OWNERS_INDEX_VIEW = "owners/index";
+
+    private static final String FIND_OWNERS_VIEW = "owners/findOwners";
+
+    private static final String OWNER_DETAILS_VIEW = "owners/ownerDetails";
+
+    private static final String CREATE_OR_UPDATE_OWNER_VIEW = "owners/createOrUpdateOwnerForm";
+
     private final OwnerService ownerService;
 
+    /**
+     * Prevents the model from getting the id
+     */
+    @InitBinder
+    public void setAllowedFields(final WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
+
     @GetMapping("/find")
-    public String findOwners(final Model model) {
+    public String findOwnersForm(final Model model) {
         model.addAttribute("owner", Owner.builder().build());
 
-        return "owners/findOwners";
+        return FIND_OWNERS_VIEW;
     }
 
     @GetMapping
@@ -39,24 +61,64 @@ public class OwnerController {
 
         if (relatedOwners.isEmpty()) {
             log.info("No owners found with lastName like [{}]", lastName);
-            result.rejectValue("lastName", "404", "Not Found");
-            return "owners/findOwners";
+            result.rejectValue("lastName", "404", "Owner Not Found");
+            return FIND_OWNERS_VIEW;
         } else if (relatedOwners.size() == 1) {
             log.info("Found 1 owner with lastName like [{}]", lastName);
             return "redirect:/owners/" + relatedOwners.get(0).getId();
         } else {
             log.info("Found [{}] owners with lastName like [{}]", relatedOwners.size(), lastName);
             model.addAttribute("owners", relatedOwners);
-            return "owners/index";
+            return OWNERS_INDEX_VIEW;
         }
     }
 
     @GetMapping("/{id}")
     public ModelAndView findOwner(@PathVariable final Long id) {
-        final ModelAndView modelAndView = new ModelAndView("owners/ownerDetails");
+        final ModelAndView modelAndView = new ModelAndView(OWNER_DETAILS_VIEW);
         modelAndView.addObject(this.ownerService.findById(id));
 
         return modelAndView;
+    }
+
+    @GetMapping("/new")
+    public String createOwnerForm(final Model model) {
+        model.addAttribute("owner", Owner.builder().build());
+
+        return CREATE_OR_UPDATE_OWNER_VIEW;
+    }
+
+    @PostMapping("/new")
+    public String addOwner(final Owner owner, final BindingResult result) {
+        if (result.hasErrors()) {
+            log.error("Error occurred while trying to save owner with firstName=[{}], lastName=[{}]",
+                owner.getFirstName(), owner.getLastName());
+            return CREATE_OR_UPDATE_OWNER_VIEW;
+        } else {
+            final Owner savedOwner = this.ownerService.save(owner);
+            return "redirect:/owners/" + savedOwner.getId();
+        }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String updateOwnerForm(@PathVariable final Long id, final Model model) {
+        final Owner owner = this.ownerService.findById(id);
+
+        model.addAttribute("owner", owner);
+        return CREATE_OR_UPDATE_OWNER_VIEW;
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editOwner(@Valid final Owner owner, final BindingResult result, @PathVariable final Long id) {
+        if (result.hasErrors()) {
+            log.error("Error occurred while trying to update owner with firstName=[{}], lastName=[{}]",
+                owner.getFirstName(), owner.getLastName());
+            return CREATE_OR_UPDATE_OWNER_VIEW;
+        } else {
+            owner.setId(id);
+            final Owner savedOwner = this.ownerService.save(owner);
+            return "redirect:/owners/" + savedOwner.getId();
+        }
     }
 
 }
