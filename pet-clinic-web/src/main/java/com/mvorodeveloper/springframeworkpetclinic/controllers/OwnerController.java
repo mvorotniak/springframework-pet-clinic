@@ -35,7 +35,7 @@ public class OwnerController {
     public String showRelatedOwners(final Owner owner, final BindingResult result, final Model model) {
         final String lastName = Optional.ofNullable(owner.getLastName()).orElse("");
 
-        final List<Owner> relatedOwners = this.ownerService.findByLastNameLike(lastName);
+        final List<Owner> relatedOwners = this.ownerService.findByLastNameLike(String.format("%%%s%%", lastName));
 
         if (relatedOwners.isEmpty()) {
             log.info("No owners found with lastName like [{}]", lastName);
