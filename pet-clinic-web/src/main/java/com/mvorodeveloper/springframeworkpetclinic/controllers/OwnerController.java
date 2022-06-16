@@ -3,6 +3,8 @@ package com.mvorodeveloper.springframeworkpetclinic.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,7 +21,11 @@ import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.Valid;
+import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.CREATE_OR_UPDATE_OWNER_VIEW;
+import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.FIND_OWNERS_VIEW;
+import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.OWNERS_INDEX_VIEW;
+import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.OWNER_DETAILS_VIEW;
+import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.OWNER_HOME_REDIRECT;
 
 @Slf4j
 @AllArgsConstructor
@@ -28,18 +33,11 @@ import javax.validation.Valid;
 @Controller
 public class OwnerController {
 
-    private static final String OWNERS_INDEX_VIEW = "owners/index";
-
-    private static final String FIND_OWNERS_VIEW = "owners/findOwners";
-
-    private static final String OWNER_DETAILS_VIEW = "owners/ownerDetails";
-
-    private static final String CREATE_OR_UPDATE_OWNER_VIEW = "owners/createOrUpdateOwnerForm";
-
     private final OwnerService ownerService;
 
     /**
-     * Prevents the model from getting the id
+     * Prevents the model from getting the id, so it cannot be submitted if the end-user modifies the page
+     * or the request
      */
     @InitBinder
     public void setAllowedFields(final WebDataBinder dataBinder) {
@@ -65,7 +63,7 @@ public class OwnerController {
             return FIND_OWNERS_VIEW;
         } else if (relatedOwners.size() == 1) {
             log.info("Found 1 owner with lastName like [{}]", lastName);
-            return "redirect:/owners/" + relatedOwners.get(0).getId();
+            return OWNER_HOME_REDIRECT + relatedOwners.get(0).getId();
         } else {
             log.info("Found [{}] owners with lastName like [{}]", relatedOwners.size(), lastName);
             model.addAttribute("owners", relatedOwners);
@@ -96,7 +94,7 @@ public class OwnerController {
             return CREATE_OR_UPDATE_OWNER_VIEW;
         } else {
             final Owner savedOwner = this.ownerService.save(owner);
-            return "redirect:/owners/" + savedOwner.getId();
+            return OWNER_HOME_REDIRECT + savedOwner.getId();
         }
     }
 
@@ -117,7 +115,7 @@ public class OwnerController {
         } else {
             owner.setId(id);
             final Owner savedOwner = this.ownerService.save(owner);
-            return "redirect:/owners/" + savedOwner.getId();
+            return OWNER_HOME_REDIRECT + savedOwner.getId();
         }
     }
 
