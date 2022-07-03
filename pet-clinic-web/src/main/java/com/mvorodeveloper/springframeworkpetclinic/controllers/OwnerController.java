@@ -18,14 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.mvorodeveloper.springframeworkpetclinic.model.Owner;
 import com.mvorodeveloper.springframeworkpetclinic.services.OwnerService;
+import com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.CREATE_OR_UPDATE_OWNER_VIEW;
-import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.FIND_OWNERS_VIEW;
-import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.OWNERS_INDEX_VIEW;
-import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.OWNER_DETAILS_VIEW;
-import static com.mvorodeveloper.springframeworkpetclinic.utils.ViewsConstants.OWNER_HOME_REDIRECT;
 
 @Slf4j
 @AllArgsConstructor
@@ -48,7 +43,7 @@ public class OwnerController {
     public String findOwnersForm(final Model model) {
         model.addAttribute("owner", Owner.builder().build());
 
-        return FIND_OWNERS_VIEW;
+        return ViewsConstants.FIND_OWNERS_VIEW;
     }
 
     @GetMapping
@@ -60,20 +55,20 @@ public class OwnerController {
         if (relatedOwners.isEmpty()) {
             log.info("No owners found with lastName like [{}]", lastName);
             result.rejectValue("lastName", "404", "Owner Not Found");
-            return FIND_OWNERS_VIEW;
+            return ViewsConstants.FIND_OWNERS_VIEW;
         } else if (relatedOwners.size() == 1) {
             log.info("Found 1 owner with lastName like [{}]", lastName);
-            return OWNER_HOME_REDIRECT + relatedOwners.get(0).getId();
+            return ViewsConstants.OWNER_HOME_REDIRECT + relatedOwners.get(0).getId();
         } else {
             log.info("Found [{}] owners with lastName like [{}]", relatedOwners.size(), lastName);
             model.addAttribute("owners", relatedOwners);
-            return OWNERS_INDEX_VIEW;
+            return ViewsConstants.OWNERS_INDEX_VIEW;
         }
     }
 
     @GetMapping("/{id}")
     public ModelAndView findOwner(@PathVariable final Long id) {
-        final ModelAndView modelAndView = new ModelAndView(OWNER_DETAILS_VIEW);
+        final ModelAndView modelAndView = new ModelAndView(ViewsConstants.OWNER_DETAILS_VIEW);
         modelAndView.addObject(this.ownerService.findById(id));
 
         return modelAndView;
@@ -83,7 +78,7 @@ public class OwnerController {
     public String createOwnerForm(final Model model) {
         model.addAttribute("owner", Owner.builder().build());
 
-        return CREATE_OR_UPDATE_OWNER_VIEW;
+        return ViewsConstants.CREATE_OR_UPDATE_OWNER_VIEW;
     }
 
     @PostMapping("/new")
@@ -91,10 +86,10 @@ public class OwnerController {
         if (result.hasErrors()) {
             log.error("Error occurred while trying to save owner with firstName=[{}], lastName=[{}]",
                 owner.getFirstName(), owner.getLastName());
-            return CREATE_OR_UPDATE_OWNER_VIEW;
+            return ViewsConstants.CREATE_OR_UPDATE_OWNER_VIEW;
         } else {
             final Owner savedOwner = this.ownerService.save(owner);
-            return OWNER_HOME_REDIRECT + savedOwner.getId();
+            return ViewsConstants.OWNER_HOME_REDIRECT + savedOwner.getId();
         }
     }
 
@@ -103,7 +98,7 @@ public class OwnerController {
         final Owner owner = this.ownerService.findById(id);
 
         model.addAttribute("owner", owner);
-        return CREATE_OR_UPDATE_OWNER_VIEW;
+        return ViewsConstants.CREATE_OR_UPDATE_OWNER_VIEW;
     }
 
     @PostMapping("/{id}/edit")
@@ -111,11 +106,11 @@ public class OwnerController {
         if (result.hasErrors()) {
             log.error("Error occurred while trying to update owner with firstName=[{}], lastName=[{}]",
                 owner.getFirstName(), owner.getLastName());
-            return CREATE_OR_UPDATE_OWNER_VIEW;
+            return ViewsConstants.CREATE_OR_UPDATE_OWNER_VIEW;
         } else {
             owner.setId(id);
             final Owner savedOwner = this.ownerService.save(owner);
-            return OWNER_HOME_REDIRECT + savedOwner.getId();
+            return ViewsConstants.OWNER_HOME_REDIRECT + savedOwner.getId();
         }
     }
 
